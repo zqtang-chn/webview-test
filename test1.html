@@ -9,7 +9,8 @@
 </p>
 <script>
     var outer = document.getElementById("outer");
-    console.log(outer.style.fontWeight);
+    var computedStyle = window.getComputedStyle(outer);
+    console.log(computedStyle.getPropertyValue("font-weight"));
 </script>
 </body>
 </html>
