@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选词框 Demo</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        .select-container {
+            margin-bottom: 20px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .result {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            min-height: 50px;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>选词框演示</h2>
+        
+        <div class="select-container">
+            <label for="word-select">请选择一个词语：</label>
+            <select id="word-select">
+                <option value="" disabled selected>请选择...</option>
+                <option value="apple">苹果</option>
+                <option value="banana">香蕉</option>
+                <option value="orange">橙子</option>
+                <option value="grape">葡萄</option>
+                <option value="watermelon">西瓜</option>
+                <option value="strawberry">草莓</option>
+            </select>
+        </div>
+        
+        <div class="result" id="result">
+            您选择的词语将显示在这里
+        </div>
+    </div>
+
+    <script>
+        // 获取选词框和结果显示区域元素
+        const selectElement = document.getElementById('word-select');
+        const resultElement = document.getElementById('result');
+        
+        // 监听选词框变化事件
+        selectElement.addEventListener('change', function() {
+            const selectedValue = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            
+            // 更新结果显示
+            if (selectedValue) {
+                resultElement.innerHTML = `
+                    <p>您选择了: <strong>${selectedText}</strong></p>
+                    <p>对应值: ${selectedValue}</p>
+                `;
+            } else {
+                resultElement.textContent = '您选择的词语将显示在这里';
+            }
+        });
+    </script>
+</body>
+</html>
