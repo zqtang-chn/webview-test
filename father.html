@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>父页面</title>
+</head>
+<body>
+    <h1>父页面</h1>
+    <button onclick="sendToChild()">发送消息到子iframe</button>
+    <div id="parent-messages"></div>
+    
+    <!-- 注意这里指向不同域名的子页面 -->
+    <iframe src="https://sevuldet.github.io/webview-test/child.html" id="child-iframe"></iframe>
+
+    <script>
+        // 发送消息到子iframe
+        function sendToChild() {
+            const iframe = document.getElementById('child-iframe');
+            // 重要：指定目标域
+            iframe.contentWindow.postMessage('来自父页面的问候', 'https://sevuldet.github.io');
+            document.getElementById('parent-messages').innerHTML += 
+                `<p>已发送消息到子iframe</p>`;
+        }
+    </script>
+</body>
+</html>
