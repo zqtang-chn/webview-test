@@ -1,24 +1,94 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>父页面</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>父页面 - 使用 iframe 和 postMessage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            border: 2px solid #3498db;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #messages {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+    </style>
 </head>
 <body>
-    <h1>父页面</h1>
-    <button onclick="sendToChild()">发送消息到子iframe</button>
-    <div id="parent-messages"></div>
+    <div class="container">
+        <h1>父页面</h1>
+        <p>这个页面包含一个 iframe，将加载子页面。</p>
+        
+        <div>
+            <button id="sendToChild">发送消息给子页面</button>
+            <input type="text" id="messageInput" placeholder="输入要发送的消息">
+        </div>
+        
+        <div id="messages">
+            <p>来自子页面的消息将显示在这里...</p>
+        </div>
+    </div>
     
-    <!-- 注意这里指向不同域名的子页面 -->
+    <!-- iframe 嵌入子页面 -->
     <iframe src="https://bingoao.github.io/iframe.html" id="childFrame" style="width: 100%; height: 400px; border: 1px solid #ccc;"></iframe>
+
     <script>
-        // 发送消息到子iframe
-        function sendToChild() {
-            const iframe = document.getElementById('child-iframe');
-            // 重要：指定目标域
-            iframe.contentWindow.postMessage('来自父页面的问候', 'https://sevuldet.github.io');
-            document.getElementById('parent-messages').innerHTML += 
-                `<p>已发送消息到子iframe</p>`;
-        }
+        // Get references to DOM elements
+        const sendButton = document.getElementById('sendToChild');
+        const messageInput = document.getElementById('messageInput');
+        const messagesDiv = document.getElementById('messages');
+        const childFrame = document.getElementById('childFrame');
+        
+        // Listen for messages from child
+        window.addEventListener('message', function(event) {
+            // For security, verify the origin
+            // if (event.origin !== "http://localhost" && event.origin !== "https://yourdomain.com") {
+            //     return;
+            // }
+            
+            // Display the message from child
+            const message = document.createElement('p');
+            message.textContent = `来自子页面的消息: ${event.data}`;
+            messagesDiv.appendChild(message);
+        });
+        
+        // Send message to child when button is clicked
+        sendButton.addEventListener('click', function() {
+            const message = messageInput.value;
+            if (message) {
+                // Send message to child iframe
+                // The '*' means any origin can receive, but you should specify the exact origin in production
+                childFrame.contentWindow.postMessage(message, '*');
+                
+                // Display the sent message
+                const sentMessage = document.createElement('p');
+                sentMessage.textContent = `发送给子页面的消息: ${message}`;
+                messagesDiv.appendChild(sentMessage);
+                
+                // Clear input
+                messageInput.value = '';
+            }
+        });
     </script>
 </body>
 </html>
